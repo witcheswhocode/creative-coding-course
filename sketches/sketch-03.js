@@ -23,7 +23,7 @@ const sketch = ({ context, width, height }) => {
     agents.forEach(function(agent){
       agent.update();
       agent.draw(context);
-      agent.bounce(width.height);
+      agent.bounce(width,height);
     });
   };
 };

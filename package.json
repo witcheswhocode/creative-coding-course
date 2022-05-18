@@ -1,0 +1,23 @@
+{
+  "name": "creative-coding-course",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sketch-flowers.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/witcheswhocode/creative-coding-course.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/witcheswhocode/creative-coding-course/issues"
+  },
+  "homepage": "https://github.com/witcheswhocode/creative-coding-course#readme",
+  "dependencies": {
+    "canvas-sketch": "^0.7.5"
+  }
+}

@@ -9,12 +9,12 @@ const settings = {
 };
 
 const params = {
-  cols: 10,
-  rows: 10,
+  cols: 50,
+  rows: 50,
   scaleMin: 1,
   scaleMax: 30,
-  freq: 0.001,
-  amp: 0.2,
+  freq: 0.003,
+  amp: 0.4,
   frame: 0,
   animate: true,
   lineCap: 'butt',
@@ -51,7 +51,11 @@ const sketch = () => {
       const n = random.noise3D(x,y,f * 10, params.freq);
       const angle = n * Math.PI * params.amp;
       const scale = math.mapRange(n, -1, 1, params.scaleMin, params.scaleMax);
-
+      
+      if (math.radToDeg(angle) < 2){
+        //console.log(math.degToRad(angle));
+        continue;
+      }
       context.save();
       context.translate(x,y);
       context.translate(margx,margy);
@@ -63,7 +67,7 @@ const sketch = () => {
 
       context.beginPath();
       context.moveTo(w * -0.5, 0);
-      context.lineTo(w * 0.5, 0);
+      context.lineTo(h * 0.5, 0);
       context.stroke();
 
       context.restore();

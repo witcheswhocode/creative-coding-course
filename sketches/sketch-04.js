@@ -12,12 +12,12 @@ const params = {
   cols: 50,
   rows: 50,
   scaleMin: 1,
-  scaleMax: 30,
-  freq: 0.003,
-  amp: 0.4,
+  scaleMax: 22,
+  freq: -0.004,
+  amp: 0.2,
   frame: 0,
   animate: true,
-  lineCap: 'butt',
+  lineCap: 'round',
 };
 
 const sketch = () => {

@@ -4,17 +4,22 @@ const settings = {
   dimensions: [ 1080, 1080 ]
 };
 
+
+let text = 'A';
+let fontSize = 1200;
+let fontFamily = 'serif';
+
 const sketch = () => {
   return ({ context, width, height }) => {
     context.fillStyle = 'white';
     context.fillRect(0, 0, width, height);
 
     context.fillStyle = 'black';
-    context.font = '1200px serif';
+    //context.font = fontSize + 'px ' + fontFamily;
+    context.font = `${fontSize}px ${fontFamily}`;
     context.textBaseline = 'top';
     //context.textAlign = 'center';
 
-    const text = 'A';
 
 		const metrics = context.measureText(text);
 		const mx = metrics.actualBoundingBoxLeft * -1;
@@ -22,9 +27,11 @@ const sketch = () => {
 		const mw = metrics.actualBoundingBoxLeft + metrics.actualBoundingBoxRight;
 		const mh = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
 
-    console.log(mh);
+    const x = (width - mw) * 0.5 - mx;
+    const y = (height - mh) * 0.5 - my;
+
     context.save();
-    //context.translate(width*0.5,height*0.5);
+    context.translate(x,y);
 
     context.beginPath();
     context.rect(mx,my,mw,mh);

@@ -8,6 +8,22 @@ const settings = {
   dimensions: [ 1080, 1080 ]
 };
 
+const signInfo = {
+  'aries': {'html':'&#9800;','element':'fire','major':'C','minor':'Am'},
+  'taurus': {'html':'&#9800;','element':'fire','major':'G','minor':'Em'},
+  'gemini': {'html':'&#9800;','element':'fire','major':'D','minor':'Bm'}, 
+  'cancer': {'html':'&#9800;','element':'fire','major':'A','minor':'F#m'},
+  'leo': {'html':'&#9800;','element':'fire','major':'E','minor':'C#m'},
+  'virgo': {'html':'&#9800;','element':'fire','major':'B','minor':'G#m'},
+  'libra': {'html':'&#9800;','element':'fire','major':'F#','minor':'D#m'}, // major Gb, minor Ebm
+  'scorpio': {'html':'&#9800;','element':'fire','major':'C#','minor':''}, // major Db, minor Bbm
+  'sagittarius': {'html':'&#9800;','element':'fire','major':'G#','minor':'Fm'}, // major Ab
+  'capricorn': {'html':'&#9800;','element':'fire','major':'D#','minor':'Cm'}, // major Eb
+  'aquarius': {'html':'&#9800;','element':'fire','major':'A#','minor':'Gm'}, // major Bb
+  'pisces': {'html':'&#9800;','element':'fire','major':'F','minor':'Dm'}, 
+
+}
+
 const degToRad = (degrees) =>{
   return degrees / 180 * Math.PI
 }
@@ -69,6 +85,24 @@ const sketch = () => {
       context.restore();
 
 
+      let angle = (slice1 * i)-(slice1*3)*0.85;
+      console.log(angle);
+
+      x = cx + (width*0.4) * Math.sin(-angle);
+      y = cy + (height*0.4) * Math.cos(-angle);
+      context.save();
+      //context.translate(x,y);
+      context.beginPath();
+      //context.rotate(angle1);
+      var text = signs[i];
+      var font = "bold 12px serif";
+      context.font = font;
+      // Move it down by half the text height and left by half the text width
+      var tw = context.measureText(text).width;
+      var th = context.measureText("w").width; // this is a GUESS of height
+      context.fillText(text, (x) + (tw/2),(y) + (th/2));
+
+      context.restore();
 
       lastend += Math.PI*2*(sizeSlice/myTotal);
     }
@@ -141,12 +175,12 @@ const sketch = () => {
 
     for(let i = 0; i<num;i++){
 
-      let angle = (slice1 * i)-(slice1*3)*0.83;
+      let angle = (slice1 * i)-(slice1*3)*0.87;
       console.log(angle);
 
       x = cx + (width*0.13) * Math.sin(-angle);
       y = cy + (height*0.13) * Math.cos(-angle);
-      context.save();
+      /*context.save();
       context.translate(x,y);
       //context.rotate(angle);
       context.beginPath();
@@ -156,6 +190,19 @@ const sketch = () => {
       
       context.fillStyle = 'black';
       context.fill();
+      context.restore();*/
+
+      context.beginPath();
+      //context.rotate(angle1);
+      var text = '♍';
+      var font = "bold 12px serif";
+      context.font = font;
+      console.log(signInfo['aries'].html);
+      // Move it down by half the text height and left by half the text width
+      var tw = context.measureText(text).width;
+      var th = context.measureText("w").width; // this is a GUESS of height
+      context.fillText(text, (x) + (tw/2),(y) + (th/2));
+
       context.restore();
 
     }

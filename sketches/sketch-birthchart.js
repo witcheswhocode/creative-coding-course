@@ -42,7 +42,7 @@ const sketch = () => {
     const fireActive = '#E84855';
     const earth = '#002500';
     const earthActive = '#002500';
-    const water = '#8cbcb9e3';
+    const water = '#8CBCB9';
     const waterActive = '#8CBCB9';
     const air = '#C5CBD3';
     const airActive = '#C5CBD3';
@@ -53,6 +53,7 @@ const sketch = () => {
     var lastend1 = 15; // angle start
     var sizeSlice = 10;
     var myTotal = sizeSlice*num;
+    const slice1 = degToRad((360/num));
     var myColor = [air,earth,fire,water,air,earth,fire,water,air,earth,fire,water,air,earth,fire,water];
 
     for (var i = 0; i < num; i++) {
@@ -67,50 +68,14 @@ const sketch = () => {
       context.fill();
       context.restore();
 
-      let angle = (slice * i)+lastend1;
-      console.log(angle);
 
-      x = cx + (width*0.4) * Math.sin(angle);
-      y = cy + (width*0.4) * Math.cos(angle);
-      context.save();
-      context.translate(x,y);
-      context.beginPath();
-      context.rect(lastend1,lastend1+(Math.PI*2*(sizeSlice/myTotal)),10,10);
-      context.fillStyle = myColor[i];
-      context.fill();
-      context.restore();
-
-      let angle1 = (slice * i);
-      //console.log(angle);
-
-      x1 = (cx) + (width*0.4) * Math.sin(angle1);
-      y1 = (cy) + (height*0.4) * Math.cos(angle1);
-
-      console.log(signs[i] + ' ' + x1 + ' ' + y1);
-      console.log(signs[i] + ' ' + lastend + ' ' + (lastend+(Math.PI*2*(sizeSlice/myTotal))));
-      console.log(signs[i] + ' ' + radToDeg(lastend) + ' ' + radToDeg(lastend+(Math.PI*2*(sizeSlice/myTotal))));
-
-      context.save();
-      //context.translate(x,y);
-      context.beginPath();
-      //context.rotate(angle1);
-      var text = signs[i];
-      var font = "bold 12px serif";
-      context.font = font;
-      // Move it down by half the text height and left by half the text width
-      var tw = context.measureText(text).width;
-      var th = context.measureText("w").width; // this is a GUESS of height
-      context.fillText(text, (x1) + (tw/2),(y1) + (th/2));
-
-      context.restore();
 
       lastend += Math.PI*2*(sizeSlice/myTotal);
-      lastend1 += Math.PI*2*(sizeSlice/myTotal);
     }
 
 
     for (let i = 0; i < num; i++){
-      let angle = slice * i;
+      let angle = (slice * i)-(slice*3);
 
       x = cx + radius * Math.sin(angle);
       y = cy + radius * Math.cos(angle);
@@ -119,12 +84,12 @@ const sketch = () => {
       //console.log(angle);
       context.save();
       context.translate(x+w/2,y+w/2);
-      context.rotate(-angle);
+      context.rotate(angle);
   
       context.beginPath();
       context.rect(-w*0.5,1,w,h);
+      context.fillStyle = '#2B3A67';
       context.fill();
-      context.fillStyle = gradient;
       context.restore();
 
       /*context.save();
@@ -136,6 +101,62 @@ const sketch = () => {
       context.fill();
       context.fillStyle = gradient;
       context.restore();*/
+
+    }
+
+    for(let i = 0; i<num;i++){
+
+      let angle = (slice1 * i)-(slice1*3)*0.8;
+      console.log(angle);
+
+      x = cx + (width*0.3) * Math.sin(-angle);
+      y = cy + (height*0.3) * Math.cos(-angle);
+      context.save();
+      context.translate(x,y);
+      //context.rotate(angle);
+      context.beginPath();
+      //context.moveTo(width/3,height/3);
+      context.rect(0,0,20,20);
+      //context.lineTo(width/3,height/3);
+      
+      context.fillStyle = myColor[i];
+      context.fill();
+      context.restore();
+
+      context.save();
+      //context.translate(x,y);
+      context.beginPath();
+      //context.rotate(angle1);
+      var text = signs[i];
+      var font = "bold 12px serif";
+      context.font = font;
+      // Move it down by half the text height and left by half the text width
+      var tw = context.measureText(text).width;
+      var th = context.measureText("w").width; // this is a GUESS of height
+      context.fillText(text, (x) + (tw/2),(y) + (th/2));
+
+      context.restore();
+      lastend1 += Math.PI*2*(sizeSlice/myTotal);
+    }
+
+    for(let i = 0; i<num;i++){
+
+      let angle = (slice1 * i)-(slice1*3)*0.83;
+      console.log(angle);
+
+      x = cx + (width*0.13) * Math.sin(-angle);
+      y = cy + (height*0.13) * Math.cos(-angle);
+      context.save();
+      context.translate(x,y);
+      //context.rotate(angle);
+      context.beginPath();
+      //context.moveTo(width/3,height/3);
+      context.rect(0,0,20,20);
+      //context.lineTo(width/3,height/3);
+      
+      context.fillStyle = 'black';
+      context.fill();
+      context.restore();
 
     }
   };

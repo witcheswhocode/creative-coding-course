@@ -65,7 +65,7 @@ const randomRange = (min,max) =>{
 }
 
 const getColor = (element) =>{
-    switch (element+'Active'){
+    switch (element){
       case 'fire':
         return '#FFA8A2';
       case 'earth':
@@ -277,12 +277,12 @@ class Birthchart {
   }
   sortSignOrderToGenerateChart(){ // asc should be the sixth item in the list
     var sisterIndex = signOrder.indexOf(signInfo[this.getAscendent()]['sister']);
-    
-    if (sisterIndex == 0 || sisterIndex == signOrder.length-1){
+    console.log(sisterIndex);
+    if (sisterIndex == signOrder.length-1){
       return signOrder
     }
     else if (sisterIndex < signOrder.length-1){
-      return signOrder.slice(sisterIndex+1,signOrder.length) +','+ signOrder.slice(0,sisterIndex+1);
+      return (signOrder.slice(sisterIndex+1,signOrder.length) +','+ signOrder.slice(0,sisterIndex+1)).split(',');
     }
     else{
       console.log('else on sign order sort!!!');

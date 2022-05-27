@@ -95,12 +95,26 @@ const getColor = (element) =>{
 
 const sketch = () => {
   return ({ context, width, height }) => {
-    const birthchart = new Birthchart(lizBirthChart,width,height);
+    const birthchart = new Birthchart(lizBirthChart,width,height,context);
     context.fillStyle = 'white';
     context.fillRect(0, 0, width, height);
 
     context.fillStyle = '#2B3A67';
-    const bc = birthchart.createBirthChart(context,width,height);
+    const bc = birthchart.createBirthChart(width,height);
+    /*for (var i = 0; i < 12; i++){
+      console.log(lizBirthChart[signs[i]]);
+      setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[i]])},1000*i);
+      //setTimeout(birthchart.colorArc(lizBirthChart[signs[i]]),1000*i);
+      
+    }*/
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[0]],'Active')},1000*0);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[0]],'')},1000*1);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[1]],'Active')},1000*1);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[1]],'')},1000*2);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[2]],'Active')},1000*2);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[2]],'')},1000*3);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[3]],'')},1000*3);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[4]],'')},1000*3);
 
 
     const cx = width * 0.5;
@@ -113,36 +127,6 @@ const sketch = () => {
     const slice = degToRad(360/num);
     let x,y;
 
-
-    for (let i = 0; i < num; i++){
-      let angle = (slice * i)-(slice*3);
-
-      x = cx + radius * Math.sin(angle);
-      y = cy + radius * Math.cos(angle);
-      //console.log("points: "+x +" "+y);
-
-      //console.log(angle);
-      context.save();
-      context.translate(x+w/2,y+w/2);
-      context.rotate(angle);
-  
-      context.beginPath();
-      context.rect(-w*0.5,1,w,h);
-      context.fillStyle = '#2B3A67';
-      context.fill();
-      context.restore();
-
-      /*context.save();
-      context.translate(x,y);
-      context.rotate(-angle);
-  
-      context.beginPath();
-      context.lineTo(x,y)
-      context.fill();
-      context.fillStyle = gradient;
-      context.restore();*/
-
-    }
 
     /*for(let i = 0; i<num;i++){
 
@@ -216,9 +200,14 @@ const sketch = () => {
 };
 
 canvasSketch(sketch, settings);
-
+class ArcLocation{
+  constructor(lastends,lastende){
+    this.lastends = lastends;
+    this.lastende = lastende;
+  }
+}
 class Birthchart {
-  constructor(array,width,height){
+  constructor(array,width,height,context){
     for (var i = 0; i < signs.length; i++){
       this[signs[i]] = array[signs[i]];
     }
@@ -226,14 +215,17 @@ class Birthchart {
     this.num = 12;
     this.cx = width * 0.5;
     this.cy = height * 0.5;
+    this.radius = width * 0.4;
     this.w = width * 0.007;
     this.h = height * 0.4;
     this.width = width;
     this.height = height;
+    this.arcLocations = [];
+    this.context = context;
   }
   sortSignOrderToGenerateChart(){ // asc should be the sixth item in the list
     var sisterIndex = signOrder.indexOf(signInfo[this.getAscendent()]['sister']);
-    console.log(sisterIndex);
+
     if (sisterIndex == signOrder.length-1){
       return signOrder
     }
@@ -258,7 +250,7 @@ class Birthchart {
   getAscendent(){
     return this.asc;
   }
-  createBirthChart(context){
+  createBirthChart(){
     let x,y;
 
     const birthchartOrder = this.chartOrder;
@@ -272,49 +264,84 @@ class Birthchart {
 
     for (var i = 0; i < this.num; i++) {
       //if (i%random.rangeFloor(1,5)) {
-      context.save();
-      context.translate(this.width*0.17,this.height*0.17);
-      context.beginPath();
+      this.context.save();
+      this.context.translate(this.width*0.17,this.height*0.17);
+      this.context.beginPath();
       //context.moveTo(width/3,height/3);
-      context.arc(this.width/3,this.height/3,this.height/3,lastend,lastend+(Math.PI*2*(sizeSlice/myTotal)),false);
-      context.lineTo(this.width/3,this.height/3);
-      context.fillStyle = getColor(signInfo[birthchartOrder[i]].element);
-      context.fill();
-      context.restore();
+      this.context.arc(this.width/3,this.height/3,this.height/3,lastend,lastend+(Math.PI*2*(sizeSlice/myTotal)),false);
+      this.context.lineTo(this.width/3,this.height/3);
+      this.context.fillStyle = getColor(signInfo[birthchartOrder[i]].element);
+      this.context.fill();
+      this.context.restore();
 
       //}
 
 
       let angle = (slice1 * i)-(slice1*3)*0.85;
-      console.log(this.width);
 
       x = this.cx + (this.width*0.4) * Math.sin(-angle);
       y = this.cy + (this.height*0.4) * Math.cos(-angle);
-      context.save();
+      this.context.save();
       //context.translate(x,y);
-      context.beginPath();
+      this.context.beginPath();
       //context.rotate(angle1);
       var text = birthchartOrder[i];
       var font = "bold 12px serif";
-      context.font = font;
+      this.context.font = font;
       // Move it down by half the text height and left by half the text width
-      var tw = context.measureText(text).width;
-      var th = context.measureText("w").width; // this is a GUESS of height
-      context.fillText(text, (x) + (tw/2),(y) + (th/2));
+      var tw = this.context.measureText(text).width;
+      var th = this.context.measureText("w").width; // this is a GUESS of height
+      this.context.fillText(text, (x) + (tw/2),(y) + (th/2));
 
-      context.restore();
+      this.context.restore();
 
+      this.arcLocations.push(new ArcLocation(lastend, lastend+(Math.PI*2*(sizeSlice/myTotal))));
       lastend += Math.PI*2*(sizeSlice/myTotal);
-    }
-  }
-  highlightArc(sign){
 
+    }
+    this.createLines(this.context);
+  }
+  createLines(){
+    let x,y;
+    for (let i = 0; i < this.num; i++){
+      let angle = (this.slice * i)-(this.slice*3);
+
+      x = this.cx + this.radius * Math.sin(angle);
+      y = this.cy + this.radius * Math.cos(angle);
+
+      this.context.save();
+      this.context.translate(x+this.w/2,y+this.w/2);
+      this.context.rotate(angle);
+  
+      this.context.beginPath();
+      this.context.rect(-this.w*0.5,1,this.w,this.h);
+      this.context.fillStyle = '#2B3A67';
+      this.context.fill();
+      this.context.restore();
+    }
+
+  }
+  colorArc(sign,type){
+    console.log(sign);
+    console.log(this.arcLocations[this.chartOrder.indexOf(sign)-1]);
+    var sizeSlice = 10;
+
+    this.context.save();
+    this.context.translate(this.width*0.17,this.height*0.17);
+    this.context.beginPath();
+    //context.moveTo(width/3,height/3);
+    this.context.arc(this.width/3,this.height/3,this.height/3,this.arcLocations[this.chartOrder.indexOf(sign)].lastends,this.arcLocations[this.chartOrder.indexOf(sign)].lastende,false);
+    this.context.lineTo(this.width/3,this.height/3);
+    this.context.fillStyle = getColor((signInfo[this.chartOrder[(this.chartOrder).indexOf(sign)]].element)+type);
+    this.context.fill();
+    this.context.restore();
+
+    this.createLines(this.context);
   }
   addPlanets(context){
     for(let i = 0; i<num;i++){
 
       let angle = (slice1 * i)-(slice1*3)*0.8;
-      console.log(angle);
 
       x = cx + (width*0.3) * Math.sin(-angle);
       y = cy + (height*0.3) * Math.cos(-angle);

@@ -130,7 +130,7 @@ const sketch = () => {
 
     /*for(let i = 0; i<num;i++){
 
-      let angle = (slice1 * i)-(slice1*3)*0.8;
+      let angle = (slice * i)-(slice*3)*0.8;
       console.log(angle);
 
       x = cx + (width*0.3) * Math.sin(-angle);
@@ -220,6 +220,7 @@ class Birthchart {
     this.h = height * 0.4;
     this.width = width;
     this.height = height;
+    this.slice = degToRad((360/this.num))
     this.arcLocations = [];
     this.context = context;
   }
@@ -260,7 +261,7 @@ class Birthchart {
     var lastend = 0; // angle start
     var sizeSlice = 10;
     var myTotal = sizeSlice*this.num;
-    const slice1 = degToRad((360/this.num));
+    //const slice = degToRad((360/this.num));
 
     for (var i = 0; i < this.num; i++) {
       //if (i%random.rangeFloor(1,5)) {
@@ -277,7 +278,7 @@ class Birthchart {
       //}
 
 
-      let angle = (slice1 * i)-(slice1*3)*0.85;
+      let angle = (this.slice * i)-(this.slice*3)*0.85;
 
       x = this.cx + (this.width*0.4) * Math.sin(-angle);
       y = this.cy + (this.height*0.4) * Math.cos(-angle);
@@ -306,12 +307,13 @@ class Birthchart {
     for (let i = 0; i < this.num; i++){
       let angle = (this.slice * i)-(this.slice*3);
 
-      x = this.cx + this.radius * Math.sin(angle);
-      y = this.cy + this.radius * Math.cos(angle);
+      x = this.cx + 0 * Math.sin(angle);
+      y = this.cy + 0 * Math.cos(angle);
+      console.log(angle);
 
       this.context.save();
       this.context.translate(x+this.w/2,y+this.w/2);
-      this.context.rotate(angle);
+      this.context.rotate(-angle);
   
       this.context.beginPath();
       this.context.rect(-this.w*0.5,1,this.w,this.h);
@@ -341,7 +343,7 @@ class Birthchart {
   addPlanets(context){
     for(let i = 0; i<num;i++){
 
-      let angle = (slice1 * i)-(slice1*3)*0.8;
+      let angle = (slice * i)-(slice*3)*0.8;
 
       x = cx + (width*0.3) * Math.sin(-angle);
       y = cy + (height*0.3) * Math.cos(-angle);

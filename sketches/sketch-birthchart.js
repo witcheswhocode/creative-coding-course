@@ -21,7 +21,22 @@ const signInfo = {
   'capricorn': {'html':'&#9800;','element':'fire','major':'D#','minor':'Cm'}, // major Eb
   'aquarius': {'html':'&#9800;','element':'fire','major':'A#','minor':'Gm'}, // major Bb
   'pisces': {'html':'&#9800;','element':'fire','major':'F','minor':'Dm'}, 
-
+}
+const planetInfo = {
+  'sun': '☉',
+  'moon': 'cancer',
+  'asc': 'virgo',
+  'mercury': 'leo',
+  'venus': 'leo',
+  'mars': 'libra',
+  'jupiter': 'leo',
+  'saturn': 'aquarius',
+  'uranus': 'capricorn',
+  'neptune': 'capricorn',
+  'pluto': 'scorpio',
+  'northnode': 'capricorn',
+  'chiron': 'leo',
+  'mc': 'gemini',
 }
 
 const degToRad = (degrees) =>{
@@ -54,14 +69,22 @@ const sketch = () => {
     const slice = degToRad(360/num);
     let x,y;
 
-    const fire = '#E84855';
-    const fireActive = '#E84855';
-    const earth = '#002500';
-    const earthActive = '#002500';
-    const water = '#8CBCB9';
-    const waterActive = '#8CBCB9';
-    const air = '#C5CBD3';
-    const airActive = '#C5CBD3';
+    const fire = '#FFA8A2';
+    const fireActive = '#FE5F55';
+    const earth = '#ABD781';
+    const earthActive = '#669D31';
+    const water = '#6FC0CB';
+    const waterActive = '#28666E';
+    const air = '#FAF6F8';
+    const airActive = '#F0E2E7';
+    /*const fire = '#ffa39d';
+    const fireActive = '#de7972';
+    const earth = '#a6d57a';
+    const earthActive = '#658745';
+    const water = '#67bdc8';
+    const waterActive = '#345b60';
+    const air = '#f6eef1';
+    const airActive = '#ede3e7';*/
 
     //var canvas = document.getElementById("can");
     //var ctx = canvas.getContext("2d");
@@ -70,10 +93,10 @@ const sketch = () => {
     var sizeSlice = 10;
     var myTotal = sizeSlice*num;
     const slice1 = degToRad((360/num));
-    var myColor = [air,earth,fire,water,air,earth,fire,water,air,earth,fire,water,air,earth,fire,water];
+    var myColor = [airActive,earthActive,fireActive,waterActive,air,earth,fire,water,air,earth,fire,water,air,earth,fire,water];
 
     for (var i = 0; i < num; i++) {
-
+      //if (i%random.rangeFloor(1,5)) {
       context.save();
       context.translate(width*0.17,height*0.17);
       context.beginPath();
@@ -83,6 +106,8 @@ const sketch = () => {
       context.fillStyle = myColor[i];
       context.fill();
       context.restore();
+
+      //}
 
 
       let angle = (slice1 * i)-(slice1*3)*0.85;
@@ -161,13 +186,13 @@ const sketch = () => {
       //context.translate(x,y);
       context.beginPath();
       //context.rotate(angle1);
-      var text = signs[i];
-      var font = "bold 12px serif";
+      var text = planetInfo['sun'];
+      var font = "bold 30px serif";
       context.font = font;
       // Move it down by half the text height and left by half the text width
       var tw = context.measureText(text).width;
       var th = context.measureText("w").width; // this is a GUESS of height
-      context.fillText(text, (x) + (tw/2),(y) + (th/2));
+      context.fillText(text, (x)-10,(y)+10);
 
       context.restore();
       lastend1 += Math.PI*2*(sizeSlice/myTotal);
@@ -175,7 +200,7 @@ const sketch = () => {
 
     for(let i = 0; i<num;i++){
 
-      let angle = (slice1 * i)-(slice1*3)*0.87;
+      let angle = (slice1 * i)-(slice1*3)*0.82;
       console.log(angle);
 
       x = cx + (width*0.13) * Math.sin(-angle);
@@ -201,7 +226,7 @@ const sketch = () => {
       // Move it down by half the text height and left by half the text width
       var tw = context.measureText(text).width;
       var th = context.measureText("w").width; // this is a GUESS of height
-      context.fillText(text, (x) + (tw/2),(y) + (th/2));
+      context.fillText(text, (x),(y));
 
       context.restore();
 

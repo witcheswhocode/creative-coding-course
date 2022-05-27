@@ -143,7 +143,7 @@ const sketch = () => {
     setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[12]],'Active')},1000*12);
     setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[12]],'')},1000*13);
 
-    const cx = width * 0.5;
+    /*const cx = width * 0.5;
     const cy = height * 0.5;
     const w = width * 0.005;
     const h = height * 0.4;
@@ -153,42 +153,6 @@ const sketch = () => {
     const slice = degToRad(360/num);
     let x,y;
 
-
-    /*for(let i = 0; i<num;i++){
-
-      let angle = (slice * i)-(slice*3)*0.8;
-      console.log(angle);
-
-      x = cx + (width*0.3) * Math.sin(-angle);
-      y = cy + (height*0.3) * Math.cos(-angle);
-      context.save();
-      context.translate(x,y);
-      //context.rotate(angle);
-      context.beginPath();
-      //context.moveTo(width/3,height/3);
-      context.rect(0,0,20,20);
-      //context.lineTo(width/3,height/3);
-      
-      context.fillStyle = myColor[i];
-      context.fill();
-      context.restore();
-
-      context.save();
-      //context.translate(x,y);
-      context.beginPath();
-      //context.rotate(angle1);
-      var text = planetInfo['sun'];
-      var font = "bold 30px serif";
-      context.font = font;
-      // Move it down by half the text height and left by half the text width
-      var tw = context.measureText(text).width;
-      var th = context.measureText("w").width; // this is a GUESS of height
-      context.fillText(text, (x)-10,(y)+10);
-
-      context.restore();
-      lastend1 += Math.PI*2*(sizeSlice/myTotal);
-    }*/
-
     for(let i = 0; i<num;i++){
 
       let angle = (slice * i)-(slice*3)*0.82;
@@ -196,17 +160,6 @@ const sketch = () => {
 
       x = cx + (width*0.13) * Math.sin(-angle);
       y = cy + (height*0.13) * Math.cos(-angle);
-      /*context.save();
-      context.translate(x,y);
-      //context.rotate(angle);
-      context.beginPath();
-      //context.moveTo(width/3,height/3);
-      context.rect(0,0,20,20);
-      //context.lineTo(width/3,height/3);
-      
-      context.fillStyle = 'black';
-      context.fill();
-      context.restore();*/
 
       context.beginPath();
       //context.rotate(angle1);
@@ -221,11 +174,12 @@ const sketch = () => {
 
       context.restore();
 
-    }
+    }*/
   };
 };
 
 canvasSketch(sketch, settings);
+
 class ArcLocation{
   constructor(lastends,lastende){
     this.lastends = lastends;
@@ -309,21 +263,21 @@ class Birthchart {
       this.context.restore();
 
 
-      let angle = (this.slice * i)-(this.slice*3)*0.85;
+      let angle = (this.slice * i)-(this.slice*3)*0.83;
 
-      x = this.cx + (this.width*0.4) * Math.sin(-angle);
-      y = this.cy + (this.height*0.4) * Math.cos(-angle);
+      x = this.cx + (this.width*0.40) * Math.sin(-angle);
+      y = this.cy + (this.height*0.40) * Math.cos(-angle);
       this.context.save();
       //context.translate(x,y);
       this.context.beginPath();
       //context.rotate(angle1);
-      var text = birthchartOrder[i];
-      var font = "bold 12px serif";
+      var text = birthchartOrder[i]+' / ' + signInfo[birthchartOrder[i]].major;
+      var font = "bold 20px serif";
       this.context.font = font;
       // Move it down by half the text height and left by half the text width
       var tw = this.context.measureText(text).width;
       var th = this.context.measureText("w").width; // this is a GUESS of height
-      this.context.fillText(text, (x) + (tw/2),(y) + (th/2));
+      this.context.fillText(text, (x - 30),(y));
 
       this.context.restore();
 
@@ -331,7 +285,8 @@ class Birthchart {
       lastend += Math.PI*2*(sizeSlice/myTotal);
 
     }
-    this.createLines(this.context);
+    this.createLines();
+    this.addPlanets();
   }
   createLines(){
     let x,y;
@@ -369,16 +324,18 @@ class Birthchart {
     this.context.fill();
     this.context.restore();
 
-    this.createLines(this.context);
+    this.createLines();
+    this.addPlanets();
   }
-  addPlanets(context){
-    for(let i = 0; i<num;i++){
+  addPlanets(){
+    let x,y;
+    for(let i = 0; i<this.num;i++){
 
-      let angle = (slice * i)-(slice*3)*0.8;
+      let angle = (this.slice * i)-(this.slice*3)*0.8;
 
-      x = cx + (width*0.3) * Math.sin(-angle);
-      y = cy + (height*0.3) * Math.cos(-angle);
-      context.save();
+      x = this.cx + (this.width*0.3) * Math.sin(-angle);
+      y = this.cy + (this.height*0.3) * Math.cos(-angle);
+      /*context.save();
       context.translate(x,y);
       //context.rotate(angle);
       context.beginPath();
@@ -388,22 +345,20 @@ class Birthchart {
       
       context.fillStyle = getColor(signInfo[birthchartOrder[i]].element);
       context.fill();
-      context.restore();
+      context.restore();*/
 
-      context.save();
+      this.context.save();
       //context.translate(x,y);
-      context.beginPath();
+      this.context.beginPath();
       //context.rotate(angle1);
       var text = planetInfo['sun'];
       var font = "bold 30px serif";
-      context.font = font;
+      this.context.font = font;
       // Move it down by half the text height and left by half the text width
-      var tw = context.measureText(text).width;
-      var th = context.measureText("w").width; // this is a GUESS of height
-      context.fillText(text, (x)-10,(y)+10);
-
-      context.restore();
-      lastend1 += Math.PI*2*(sizeSlice/myTotal);
+      var tw = this.context.measureText(text).width;
+      var th = this.context.measureText("w").width; // this is a GUESS of height
+      this.context.fillText(text, (x)-10,(y)+10);
+      this.context.restore();
     }
   }
 }

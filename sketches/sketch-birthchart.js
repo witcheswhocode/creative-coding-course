@@ -10,17 +10,17 @@ const settings = {
 
 const signInfo = {
   'aries': {'sister':'libra','html':'&#9800;','element':'fire','major':'C','minor':'Am'},
-  'taurus': {'sister':'scorpio','html':'&#9800;','element':'fire','major':'G','minor':'Em'},
-  'gemini': {'sister':'sagittarius','html':'&#9800;','element':'fire','major':'D','minor':'Bm'}, 
-  'cancer': {'sister':'capricorn','html':'&#9800;','element':'fire','major':'A','minor':'F#m'},
+  'taurus': {'sister':'scorpio','html':'&#9800;','element':'earth','major':'G','minor':'Em'},
+  'gemini': {'sister':'sagittarius','html':'&#9800;','element':'air','major':'D','minor':'Bm'}, 
+  'cancer': {'sister':'capricorn','html':'&#9800;','element':'water','major':'A','minor':'F#m'},
   'leo': {'sister':'aquarius','html':'&#9800;','element':'fire','major':'E','minor':'C#m'},
-  'virgo': {'sister':'pisces','html':'&#9800;','element':'fire','major':'B','minor':'G#m'},
-  'libra': {'sister':'aries','html':'&#9800;','element':'fire','major':'F#','minor':'D#m'}, // major Gb, minor Ebm
-  'scorpio': {'sister':'taurus','html':'&#9800;','element':'fire','major':'C#','minor':''}, // major Db, minor Bbm
+  'virgo': {'sister':'pisces','html':'&#9800;','element':'earth','major':'B','minor':'G#m'},
+  'libra': {'sister':'aries','html':'&#9800;','element':'air','major':'F#','minor':'D#m'}, // major Gb, minor Ebm
+  'scorpio': {'sister':'taurus','html':'&#9800;','element':'water','major':'C#','minor':''}, // major Db, minor Bbm
   'sagittarius': {'sister':'gemini','html':'&#9800;','element':'fire','major':'G#','minor':'Fm'}, // major Ab
-  'capricorn': {'sister':'cancer','html':'&#9800;','element':'fire','major':'D#','minor':'Cm'}, // major Eb
-  'aquarius': {'sister':'leo','html':'&#9800;','element':'fire','major':'A#','minor':'Gm'}, // major Bb
-  'pisces': {'sister':'virgo','html':'&#9800;','element':'fire','major':'F','minor':'Dm'}, 
+  'capricorn': {'sister':'cancer','html':'&#9800;','element':'earth','major':'D#','minor':'Cm'}, // major Eb
+  'aquarius': {'sister':'leo','html':'&#9800;','element':'air','major':'A#','minor':'Gm'}, // major Bb
+  'pisces': {'sister':'virgo','html':'&#9800;','element':'water','major':'F','minor':'Dm'}, 
 }
 const planetInfo = {
   'sun': '☉',
@@ -64,10 +64,39 @@ const randomRange = (min,max) =>{
   return Math.random()*(max-min)+min;
 }
 
+const getColor = (element) =>{
+    switch (element+'Active'){
+      case 'fire':
+        return '#FFA8A2';
+      case 'earth':
+        return '#ABD781';
+      case 'water':
+        return '#6FC0CB';
+      case 'air':
+        return '#FAF6F8';
+      case 'fireActive':
+        return '#FE5F55';
+      case 'earthActive':
+        return '#669D31';
+      case 'waterActive':
+        return '#28666E';
+      case 'airActive':
+        return '#F0E2E7';
+    }
+  }
+  /*const fire = '#ffa39d';
+  const fireActive = '#de7972';
+  const earth = '#a6d57a';
+  const earthActive = '#658745';
+  const water = '#67bdc8';
+  const waterActive = '#345b60';
+  const air = '#f6eef1';
+  const airActive = '#ede3e7';*/
+
 const sketch = () => {
   const birthchart = new Birthchart(lizBirthChart);
   console.log(birthchart.getAscendent());
-  birthchart.sortSignOrderToGenerateChart();
+  const birthchartOrder = birthchart.sortSignOrderToGenerateChart();
   return ({ context, width, height }) => {
     context.fillStyle = 'white';
     context.fillRect(0, 0, width, height);
@@ -89,22 +118,7 @@ const sketch = () => {
     const slice = degToRad(360/num);
     let x,y;
 
-    const fire = '#FFA8A2';
-    const fireActive = '#FE5F55';
-    const earth = '#ABD781';
-    const earthActive = '#669D31';
-    const water = '#6FC0CB';
-    const waterActive = '#28666E';
-    const air = '#FAF6F8';
-    const airActive = '#F0E2E7';
-    /*const fire = '#ffa39d';
-    const fireActive = '#de7972';
-    const earth = '#a6d57a';
-    const earthActive = '#658745';
-    const water = '#67bdc8';
-    const waterActive = '#345b60';
-    const air = '#f6eef1';
-    const airActive = '#ede3e7';*/
+    
 
     //var canvas = document.getElementById("can");
     //var ctx = canvas.getContext("2d");
@@ -113,7 +127,6 @@ const sketch = () => {
     var sizeSlice = 10;
     var myTotal = sizeSlice*num;
     const slice1 = degToRad((360/num));
-    var myColor = [airActive,earthActive,fireActive,waterActive,air,earth,fire,water,air,earth,fire,water,air,earth,fire,water];
 
     for (var i = 0; i < num; i++) {
       //if (i%random.rangeFloor(1,5)) {
@@ -123,7 +136,7 @@ const sketch = () => {
       //context.moveTo(width/3,height/3);
       context.arc(width/3,height/3,height/3,lastend,lastend+(Math.PI*2*(sizeSlice/myTotal)),false);
       context.lineTo(width/3,height/3);
-      context.fillStyle = myColor[i];
+      context.fillStyle = getColor(signInfo[birthchartOrder[i]].element);
       context.fill();
       context.restore();
 
@@ -139,7 +152,7 @@ const sketch = () => {
       //context.translate(x,y);
       context.beginPath();
       //context.rotate(angle1);
-      var text = signs[i];
+      var text = birthchartOrder[i];
       var font = "bold 12px serif";
       context.font = font;
       // Move it down by half the text height and left by half the text width
@@ -289,6 +302,9 @@ class Birthchart {
   getAscendent(){
     return this.asc;
   }
+  highlightArc(sign){
+
+  }
   addPlanets(context){
     for(let i = 0; i<num;i++){
 
@@ -305,7 +321,7 @@ class Birthchart {
       context.rect(0,0,20,20);
       //context.lineTo(width/3,height/3);
       
-      context.fillStyle = myColor[i];
+      context.fillStyle = getColor(signInfo[birthchartOrder[i]].element);
       context.fill();
       context.restore();
 

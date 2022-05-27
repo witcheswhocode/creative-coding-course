@@ -38,7 +38,7 @@ const planetInfo = {
   'chiron': 'leo',
   'mc': 'gemini',
 }
-const signs = ['sun', 'moon', 'asc', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'northnode', 'chiron', 'mc' ];
+const planets = ['sun', 'moon', 'asc', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'northnode', 'chiron', 'mc' ];
 const signOrder = ['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces'];
 const lizBirthChart = {
   'sun': 'virgo',
@@ -66,14 +66,22 @@ const randomRange = (min,max) =>{
 
 const getColor = (element) =>{
     switch (element){
-      case 'fire':
+      /*case 'fire':
         return '#FFA8A2';
       case 'earth':
         return '#ABD781';
       case 'water':
         return '#6FC0CB';
       case 'air':
-        return '#FAF6F8';
+        return '#FAF6F8';*/
+      case 'fire':
+        return '#FFE7E2';
+      case 'earth':
+        return '#E7F4DB';
+      case 'water':
+        return '#D6EDF0';
+      case 'air':
+        return '#FDFAFB';
       case 'fireActive':
         return '#FE5F55';
       case 'earthActive':
@@ -81,7 +89,7 @@ const getColor = (element) =>{
       case 'waterActive':
         return '#28666E';
       case 'airActive':
-        return '#F0E2E7';
+        return '#DCBCC8';//'#EAD7DE';//'#F0E2E7';
     }
   }
   /*const fire = '#ffa39d';
@@ -102,24 +110,42 @@ const sketch = () => {
     context.fillStyle = '#2B3A67';
     const bc = birthchart.createBirthChart(width,height);
     /*for (var i = 0; i < 12; i++){
-      console.log(lizBirthChart[signs[i]]);
-      setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[i]])},1000*i);
-      //setTimeout(birthchart.colorArc(lizBirthChart[signs[i]]),1000*i);
-      
+      setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[i]],'Active')},1000*i);
+      setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[i]],'')},1000*(i+1));
     }*/
-    setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[0]],'Active')},1000*0);
-    setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[0]],'')},1000*1);
-    setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[1]],'Active')},1000*1);
-    setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[1]],'')},1000*2);
-    setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[2]],'Active')},1000*2);
-    setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[2]],'')},1000*3);
-    setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[3]],'')},1000*3);
-    setTimeout(()=>{birthchart.colorArc(lizBirthChart[signs[4]],'')},1000*3);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[0]],'Active')},1000*0);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[0]],'')},1000*1);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[1]],'Active')},1000*1);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[1]],'')},1000*2);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[2]],'Active')},1000*2);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[2]],'')},1000*3);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[3]],'Active')},1000*3);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[3]],'')},1000*4);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[4]],'Active')},1000*4);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[4]],'')},1000*5);
 
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[5]],'Active')},1000*5);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[5]],'')},1000*6);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[6]],'Active')},1000*6);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[6]],'')},1000*7);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[7]],'Active')},1000*7);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[7]],'')},1000*8);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[8]],'Active')},1000*8);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[8]],'')},1000*9);
+
+
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[9]],'Active')},1000*9);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[9]],'')},1000*10);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[10]],'Active')},1000*10);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[10]],'')},1000*11);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[11]],'Active')},1000*11);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[11]],'')},1000*12);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[12]],'Active')},1000*12);
+    setTimeout(()=>{birthchart.colorArc(lizBirthChart[planets[12]],'')},1000*13);
 
     const cx = width * 0.5;
     const cy = height * 0.5;
-    const w = width * 0.007;
+    const w = width * 0.005;
     const h = height * 0.4;
 
     const num = 12;
@@ -208,15 +234,16 @@ class ArcLocation{
 }
 class Birthchart {
   constructor(array,width,height,context){
-    for (var i = 0; i < signs.length; i++){
-      this[signs[i]] = array[signs[i]];
+    for (var i = 0; i < planets.length; i++){
+      this[planets[i]] = array[planets[i]];
     }
-    this.chartOrder = this.sortSignOrderToGenerateChart();  
+    this.chartOrder = this.sortSignOrderToGenerateChart(); 
+    this.planetSigns = this.getPlanetLocations(); 
     this.num = 12;
     this.cx = width * 0.5;
     this.cy = height * 0.5;
     this.radius = width * 0.4;
-    this.w = width * 0.007;
+    this.w = width * 0.004;
     this.h = height * 0.4;
     this.width = width;
     this.height = height;
@@ -238,16 +265,23 @@ class Birthchart {
       return signOrder;
     }
   }
-  /*getPlanetLocations(){
-    var arr = [];
-    for (var i = 0; i < signs.length; i++){
-      for (var j = 0; j < signs.length; j++){
-        if (this.signs[j] == signs[i]){
-
+  getPlanetLocations(){
+    var arr = {};
+    for (var i = 0; i < planets.length; i++){
+      var currentPlanet = planets[i];
+      var currentSign = this[currentPlanet];
+      if (currentPlanet == planets[i]){
+        if (arr[currentSign]){
+          arr[currentSign] += ','+currentPlanet;
+        }
+        else {
+          arr[currentSign] = currentPlanet;
         }
       }
+      
     }
-  }*/
+    return arr;
+  }
   getAscendent(){
     return this.asc;
   }
@@ -264,7 +298,6 @@ class Birthchart {
     //const slice = degToRad((360/this.num));
 
     for (var i = 0; i < this.num; i++) {
-      //if (i%random.rangeFloor(1,5)) {
       this.context.save();
       this.context.translate(this.width*0.17,this.height*0.17);
       this.context.beginPath();
@@ -274,8 +307,6 @@ class Birthchart {
       this.context.fillStyle = getColor(signInfo[birthchartOrder[i]].element);
       this.context.fill();
       this.context.restore();
-
-      //}
 
 
       let angle = (this.slice * i)-(this.slice*3)*0.85;
@@ -309,7 +340,7 @@ class Birthchart {
 
       x = this.cx + 0 * Math.sin(angle);
       y = this.cy + 0 * Math.cos(angle);
-      console.log(angle);
+      //console.log(angle);
 
       this.context.save();
       this.context.translate(x+this.w/2,y+this.w/2);
@@ -324,8 +355,8 @@ class Birthchart {
 
   }
   colorArc(sign,type){
-    console.log(sign);
-    console.log(this.arcLocations[this.chartOrder.indexOf(sign)-1]);
+    //console.log(sign);
+    //console.log(this.arcLocations[this.chartOrder.indexOf(sign)-1]);
     var sizeSlice = 10;
 
     this.context.save();

@@ -9,21 +9,39 @@ const settings = {
 };
 
 const signInfo = {
-  'aries': {'html':'&#9800;','element':'fire','major':'C','minor':'Am'},
-  'taurus': {'html':'&#9800;','element':'fire','major':'G','minor':'Em'},
-  'gemini': {'html':'&#9800;','element':'fire','major':'D','minor':'Bm'}, 
-  'cancer': {'html':'&#9800;','element':'fire','major':'A','minor':'F#m'},
-  'leo': {'html':'&#9800;','element':'fire','major':'E','minor':'C#m'},
-  'virgo': {'html':'&#9800;','element':'fire','major':'B','minor':'G#m'},
-  'libra': {'html':'&#9800;','element':'fire','major':'F#','minor':'D#m'}, // major Gb, minor Ebm
-  'scorpio': {'html':'&#9800;','element':'fire','major':'C#','minor':''}, // major Db, minor Bbm
-  'sagittarius': {'html':'&#9800;','element':'fire','major':'G#','minor':'Fm'}, // major Ab
-  'capricorn': {'html':'&#9800;','element':'fire','major':'D#','minor':'Cm'}, // major Eb
-  'aquarius': {'html':'&#9800;','element':'fire','major':'A#','minor':'Gm'}, // major Bb
-  'pisces': {'html':'&#9800;','element':'fire','major':'F','minor':'Dm'}, 
+  'aries': {'sister':'libra','html':'&#9800;','element':'fire','major':'C','minor':'Am'},
+  'taurus': {'sister':'scorpio','html':'&#9800;','element':'fire','major':'G','minor':'Em'},
+  'gemini': {'sister':'sagittarius','html':'&#9800;','element':'fire','major':'D','minor':'Bm'}, 
+  'cancer': {'sister':'capricorn','html':'&#9800;','element':'fire','major':'A','minor':'F#m'},
+  'leo': {'sister':'aquarius','html':'&#9800;','element':'fire','major':'E','minor':'C#m'},
+  'virgo': {'sister':'pisces','html':'&#9800;','element':'fire','major':'B','minor':'G#m'},
+  'libra': {'sister':'aries','html':'&#9800;','element':'fire','major':'F#','minor':'D#m'}, // major Gb, minor Ebm
+  'scorpio': {'sister':'taurus','html':'&#9800;','element':'fire','major':'C#','minor':''}, // major Db, minor Bbm
+  'sagittarius': {'sister':'gemini','html':'&#9800;','element':'fire','major':'G#','minor':'Fm'}, // major Ab
+  'capricorn': {'sister':'cancer','html':'&#9800;','element':'fire','major':'D#','minor':'Cm'}, // major Eb
+  'aquarius': {'sister':'leo','html':'&#9800;','element':'fire','major':'A#','minor':'Gm'}, // major Bb
+  'pisces': {'sister':'virgo','html':'&#9800;','element':'fire','major':'F','minor':'Dm'}, 
 }
 const planetInfo = {
   'sun': '☉',
+  'moon': 'cancer',
+  'asc': 'virgo',
+  'mercury': 'leo',
+  'venus': 'leo',
+  'mars': 'libra',
+  'jupiter': 'leo',
+  'saturn': 'aquarius',
+  'uranus': 'capricorn',
+  'neptune': 'capricorn',
+  'pluto': 'scorpio',
+  'northnode': 'capricorn',
+  'chiron': 'leo',
+  'mc': 'gemini',
+}
+const signs = ['sun', 'moon', 'asc', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'northnode', 'chiron', 'mc' ];
+const signOrder = ['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces'];
+const lizBirthChart = {
+  'sun': 'virgo',
   'moon': 'cancer',
   'asc': 'virgo',
   'mercury': 'leo',
@@ -47,6 +65,9 @@ const randomRange = (min,max) =>{
 }
 
 const sketch = () => {
+  const birthchart = new Birthchart(lizBirthChart);
+  console.log(birthchart.getAscendent());
+  birthchart.sortSignOrderToGenerateChart();
   return ({ context, width, height }) => {
     context.fillStyle = 'white';
     context.fillRect(0, 0, width, height);
@@ -57,7 +78,6 @@ const sketch = () => {
 
     context.fillStyle = '#2B3A67';
 
-    const signs = ['sun', 'moon', 'asc', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'northnode', 'chiron', 'mc' ];
 
     const cx = width * 0.5;
     const cy = height * 0.5;
@@ -111,7 +131,7 @@ const sketch = () => {
 
 
       let angle = (slice1 * i)-(slice1*3)*0.85;
-      console.log(angle);
+      //console.log(angle);
 
       x = cx + (width*0.4) * Math.sin(-angle);
       y = cy + (height*0.4) * Math.cos(-angle);
@@ -163,6 +183,113 @@ const sketch = () => {
 
     }
 
+    /*for(let i = 0; i<num;i++){
+
+      let angle = (slice1 * i)-(slice1*3)*0.8;
+      console.log(angle);
+
+      x = cx + (width*0.3) * Math.sin(-angle);
+      y = cy + (height*0.3) * Math.cos(-angle);
+      context.save();
+      context.translate(x,y);
+      //context.rotate(angle);
+      context.beginPath();
+      //context.moveTo(width/3,height/3);
+      context.rect(0,0,20,20);
+      //context.lineTo(width/3,height/3);
+      
+      context.fillStyle = myColor[i];
+      context.fill();
+      context.restore();
+
+      context.save();
+      //context.translate(x,y);
+      context.beginPath();
+      //context.rotate(angle1);
+      var text = planetInfo['sun'];
+      var font = "bold 30px serif";
+      context.font = font;
+      // Move it down by half the text height and left by half the text width
+      var tw = context.measureText(text).width;
+      var th = context.measureText("w").width; // this is a GUESS of height
+      context.fillText(text, (x)-10,(y)+10);
+
+      context.restore();
+      lastend1 += Math.PI*2*(sizeSlice/myTotal);
+    }*/
+
+    for(let i = 0; i<num;i++){
+
+      let angle = (slice1 * i)-(slice1*3)*0.82;
+      //console.log(angle);
+
+      x = cx + (width*0.13) * Math.sin(-angle);
+      y = cy + (height*0.13) * Math.cos(-angle);
+      /*context.save();
+      context.translate(x,y);
+      //context.rotate(angle);
+      context.beginPath();
+      //context.moveTo(width/3,height/3);
+      context.rect(0,0,20,20);
+      //context.lineTo(width/3,height/3);
+      
+      context.fillStyle = 'black';
+      context.fill();
+      context.restore();*/
+
+      context.beginPath();
+      //context.rotate(angle1);
+      var text = '♍';
+      var font = "bold 12px serif";
+      context.font = font;
+      //console.log(signInfo['aries'].html);
+      // Move it down by half the text height and left by half the text width
+      var tw = context.measureText(text).width;
+      var th = context.measureText("w").width; // this is a GUESS of height
+      context.fillText(text, (x),(y));
+
+      context.restore();
+
+    }
+  };
+};
+
+canvasSketch(sketch, settings);
+
+class Birthchart {
+  constructor(array){
+    for (var i = 0; i < signs.length; i++){
+      this[signs[i]] = array[signs[i]];
+    }
+  }
+  sortSignOrderToGenerateChart(){ // asc should be the sixth item in the list
+    var sisterIndex = signOrder.indexOf(signInfo[this.getAscendent()]['sister']);
+    
+    if (sisterIndex == 0 || sisterIndex == signOrder.length-1){
+      return signOrder
+    }
+    else if (sisterIndex < signOrder.length-1){
+      return signOrder.slice(sisterIndex+1,signOrder.length) +','+ signOrder.slice(0,sisterIndex+1);
+    }
+    else{
+      console.log('else on sign order sort!!!');
+      return signOrder;
+    }
+  }
+  /*getPlanetLocations(){
+    var arr = [];
+    for (var i = 0; i < signs.length; i++){
+      for (var j = 0; j < signs.length; j++){
+        if (this.signs[j] == signs[i]){
+
+        }
+      }
+    }
+  }*/
+  getAscendent(){
+    return this.asc;
+  }
+  addPlanets(context){
     for(let i = 0; i<num;i++){
 
       let angle = (slice1 * i)-(slice1*3)*0.8;
@@ -197,41 +324,5 @@ const sketch = () => {
       context.restore();
       lastend1 += Math.PI*2*(sizeSlice/myTotal);
     }
-
-    for(let i = 0; i<num;i++){
-
-      let angle = (slice1 * i)-(slice1*3)*0.82;
-      console.log(angle);
-
-      x = cx + (width*0.13) * Math.sin(-angle);
-      y = cy + (height*0.13) * Math.cos(-angle);
-      /*context.save();
-      context.translate(x,y);
-      //context.rotate(angle);
-      context.beginPath();
-      //context.moveTo(width/3,height/3);
-      context.rect(0,0,20,20);
-      //context.lineTo(width/3,height/3);
-      
-      context.fillStyle = 'black';
-      context.fill();
-      context.restore();*/
-
-      context.beginPath();
-      //context.rotate(angle1);
-      var text = '♍';
-      var font = "bold 12px serif";
-      context.font = font;
-      console.log(signInfo['aries'].html);
-      // Move it down by half the text height and left by half the text width
-      var tw = context.measureText(text).width;
-      var th = context.measureText("w").width; // this is a GUESS of height
-      context.fillText(text, (x),(y));
-
-      context.restore();
-
-    }
-  };
-};
-
-canvasSketch(sketch, settings);
+  }
+}

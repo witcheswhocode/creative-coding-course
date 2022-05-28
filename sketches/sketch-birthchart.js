@@ -24,23 +24,39 @@ const signInfo = {
 }
 const planetInfo = {
   'sun': '☉',
-  'moon': 'cancer',
-  'asc': 'virgo',
-  'mercury': 'leo',
-  'venus': 'leo',
-  'mars': 'libra',
-  'jupiter': 'leo',
-  'saturn': 'aquarius',
-  'uranus': 'capricorn',
-  'neptune': 'capricorn',
-  'pluto': 'scorpio',
-  'northnode': 'capricorn',
-  'chiron': 'leo',
-  'mc': 'gemini',
+  'moon': '☾',
+  'asc': '☊',
+  'mercury': '☿',
+  'venus': '♀',
+  'mars': '♂',
+  'jupiter': '♃',
+  'saturn': '♄',
+  'uranus': '♅',
+  'neptune': '♆',
+  'pluto': '♇',
+  /*'northnode': 'nn',
+  'chiron': 'c',
+  'mc': 'mc',*/
 }
-const planets = ['sun', 'moon', 'asc', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto', 'northnode', 'chiron', 'mc' ];
+const planets = ['sun', 'moon', 'asc', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'/*, 'northnode', 'chiron', 'mc' */];
 const signOrder = ['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces'];
 const lizBirthChart = {
+  'sun': 'cancer',
+  'moon': 'cancer',
+  'asc': 'virgo',
+  'mercury': 'cancer',
+  'venus': 'cancer',
+  'mars': 'cancer',
+  'jupiter': 'cancer',
+  'saturn': 'cancer',
+  'uranus': 'cancer',
+  'neptune': 'cancer',
+  'pluto': 'cancer',
+  'northnode': 'virgo',
+  'chiron': 'virgo',
+  'mc': 'virgo',
+}
+/*const lizBirthChart = {
   'sun': 'virgo',
   'moon': 'cancer',
   'asc': 'virgo',
@@ -55,7 +71,7 @@ const lizBirthChart = {
   'northnode': 'capricorn',
   'chiron': 'leo',
   'mc': 'gemini',
-}
+}*/
 
 const degToRad = (degrees) =>{
   return degrees / 180 * Math.PI
@@ -283,10 +299,9 @@ class Birthchart {
 
       this.arcLocations.push(new ArcLocation(lastend, lastend+(Math.PI*2*(sizeSlice/myTotal))));
       lastend += Math.PI*2*(sizeSlice/myTotal);
-
+      this.addPlanets(birthchartOrder[i]);
     }
     this.createLines();
-    this.addPlanets();
   }
   createLines(){
     let x,y;
@@ -325,14 +340,14 @@ class Birthchart {
     this.context.restore();
 
     this.createLines();
-    this.addPlanets();
+    this.addPlanets(sign);
   }
-  addPlanets(){
-    let x,y;
-    for(let i = 0; i<this.num;i++){
+  addPlanets(sign){
+    if (this.planetSigns[sign]){
+      let x,y;
 
-      let angle = (this.slice * i)-(this.slice*3)*0.8;
-
+      let angle = (this.slice * this.chartOrder.indexOf(sign))-(this.slice*3)*0.83;
+  
       x = this.cx + (this.width*0.3) * Math.sin(-angle);
       y = this.cy + (this.height*0.3) * Math.cos(-angle);
       /*context.save();
@@ -346,19 +361,26 @@ class Birthchart {
       context.fillStyle = getColor(signInfo[birthchartOrder[i]].element);
       context.fill();
       context.restore();*/
+      let planets = this.planetSigns[sign].split(',');
+      let xAdd = 25, yAdd = 25;
+      for (var i = 0; i < planets.length; i++){
+        x = this.cx + (this.width*0.33-(i*xAdd)) * Math.sin(-angle);
+        y = this.cy + (this.height*0.33-(i*yAdd)) * Math.cos(-angle);
+        console.log(planetInfo[planets[i]]);
+        this.context.save();
+        //context.translate(x,y);
+        this.context.beginPath();
+        //context.rotate(angle1);
+        var text = planetInfo[planets[i]];
+        var font = "bold 30px serif";
+        this.context.font = font;
+        // Move it down by half the text height and left by half the text width
+        var tw = this.context.measureText(text).width;
+        var th = this.context.measureText("w").width; // this is a GUESS of height
+        this.context.fillText(text, (x+5),(y+10));
+        this.context.restore();
 
-      this.context.save();
-      //context.translate(x,y);
-      this.context.beginPath();
-      //context.rotate(angle1);
-      var text = planetInfo['sun'];
-      var font = "bold 30px serif";
-      this.context.font = font;
-      // Move it down by half the text height and left by half the text width
-      var tw = this.context.measureText(text).width;
-      var th = this.context.measureText("w").width; // this is a GUESS of height
-      this.context.fillText(text, (x)-10,(y)+10);
-      this.context.restore();
+      }
     }
   }
 }

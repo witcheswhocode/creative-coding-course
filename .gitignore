@@ -1,3 +1,5 @@
 node_modules
 sketches/output/.DS_Store
 *.mp4
+*.mov
+sketches/.DS_Store

@@ -108,6 +108,7 @@ const getColor = (element) =>{
         return '#DCBCC8';//'#EAD7DE';//'#F0E2E7';
     }
   }
+  
   /*const fire = '#ffa39d';
   const fireActive = '#de7972';
   const earth = '#a6d57a';
@@ -342,6 +343,39 @@ class Birthchart {
     this.createLines();
     this.addPlanets(sign);
   }
+  getQuadrant(sign){
+    switch(this.chartOrder.indexOf(sign)){
+      case 0:
+      case 1:
+      case 2:
+        return 1;
+      case 3:
+      case 4:
+      case 5:
+        return 2;
+      case 6:
+      case 7:
+      case 8:
+        return 3;
+      case 9:
+      case 10:
+      case 11:
+        return 4;
+    }
+  }
+  getSignPosition(quadrant){
+    switch(quadrant){
+      // [run,rise,x,y]
+      case 1:
+        return [25,25,5,10];
+      case 2:
+        return [25,25,5,10];
+      case 3:
+        return [25,25,5,10];
+      case 4:
+        return [25,25,5,10];
+    }
+  }
   addPlanets(sign){
     if (this.planetSigns[sign]){
       let x,y;
@@ -362,11 +396,14 @@ class Birthchart {
       context.fill();
       context.restore();*/
       let planets = this.planetSigns[sign].split(',');
-      let xAdd = 25, yAdd = 25;
+      let positions = this.getSignPosition(this.getQuadrant(sign));
+      console.log(positions)
+      let xAdd = positions[0], yAdd = positions[1];
+      console.log(this.chartOrder);
       for (var i = 0; i < planets.length; i++){
         x = this.cx + (this.width*0.33-(i*xAdd)) * Math.sin(-angle);
         y = this.cy + (this.height*0.33-(i*yAdd)) * Math.cos(-angle);
-        console.log(planetInfo[planets[i]]);
+        //console.log(planetInfo[planets[i]]);
         this.context.save();
         //context.translate(x,y);
         this.context.beginPath();
@@ -377,7 +414,7 @@ class Birthchart {
         // Move it down by half the text height and left by half the text width
         var tw = this.context.measureText(text).width;
         var th = this.context.measureText("w").width; // this is a GUESS of height
-        this.context.fillText(text, (x+5),(y+10));
+        this.context.fillText(text, (x+positions[2]),(y+positions[3]));
         this.context.restore();
 
       }

@@ -41,17 +41,17 @@ const planetInfo = {
 const planets = ['sun', 'moon', 'asc', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune', 'pluto'/*, 'northnode', 'chiron', 'mc' */];
 const signOrder = ['aries','taurus','gemini','cancer','leo','virgo','libra','scorpio','sagittarius','capricorn','aquarius','pisces'];
 const lizBirthChart = {
-  'sun': 'cancer',
-  'moon': 'cancer',
+  'sun': 'taurus',
+  'moon': 'taurus',
   'asc': 'virgo',
-  'mercury': 'cancer',
-  'venus': 'cancer',
-  'mars': 'cancer',
-  'jupiter': 'cancer',
-  'saturn': 'cancer',
-  'uranus': 'cancer',
-  'neptune': 'cancer',
-  'pluto': 'cancer',
+  'mercury': 'taurus',
+  'venus': 'taurus',
+  'mars': 'taurus',
+  'jupiter': 'taurus',
+  'saturn': 'taurus',
+  'uranus': 'taurus',
+  'neptune': 'taurus',
+  'pluto': 'taurus',
   'northnode': 'virgo',
   'chiron': 'virgo',
   'mc': 'virgo',
@@ -348,19 +348,19 @@ class Birthchart {
       case 0:
       case 1:
       case 2:
-        return 1;
+        return 4;
       case 3:
       case 4:
       case 5:
-        return 2;
+        return 3;
       case 6:
       case 7:
       case 8:
-        return 3;
+        return 2;
       case 9:
       case 10:
       case 11:
-        return 4;
+        return 1;
     }
   }
   getSignPosition(quadrant){
@@ -373,7 +373,7 @@ class Birthchart {
       case 3:
         return [25,25,5,10];
       case 4:
-        return [25,25,5,10];
+        return [25,25,0,0];
     }
   }
   addPlanets(sign){

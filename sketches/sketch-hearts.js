@@ -13,7 +13,7 @@ const sketch = ({ context, width, height }) => {
   for(let i = 0; i < 100; i++){
     const x = random.range(0,width);
     const y = random.range(0,height);
-    agents.push(new Heart(x,y));
+    agents.push(new Heart(x,y,width,height));
   }
 
   return ({ context, width, height }) => {
@@ -59,12 +59,14 @@ class Vector {
   }
 }
 class Heart{
-  constructor(x,y){
+  constructor(x,y,width,height){
     this.pos = new Vector(x,y);
     this.velocity = new Vector(random.range(-1,1),random.range(-1,1));
     this.half = (random.range(0,1) > 0.5) ? 'left' :  'right';
     this.colorLevel = -10;
     this.dagger = 0;
+    this.canvasWidth = width;
+    this.canvasHeight = height;
   }
 
   update(){
@@ -175,16 +177,18 @@ class Heart{
       context.fillStyle = this.getHeartColor(0);
     }
     context.fill();
+    context.shadowColor = "transparent";
+
     context.restore();
 
     if (this.half == 'whole') {
       if (this.colorLevel > 0){
         this.drawFire(context);
       }
-      /*if (this.colorLevel > 5 && this.dagger < 3){
+      if (this.colorLevel > -2 && this.dagger < 2){
         this.dagger += 1;
         this.drawLightning(context);
-      }*/
+      }
     }
   
   }
@@ -192,12 +196,12 @@ class Heart{
     var x = this.pos.x;
     var y = this.pos.y;
     context.beginPath();
-    context.moveTo(random.range(0,500), 500);
+    context.moveTo(random.range(0,this.width), 1000);
     context.lineTo(x, y);
-    context.lineWidth = 3;
-    context.strokeStyle = 'blue';//`rgba(255, 255, 255, 0.4)`;
+    context.lineWidth = 10;
+    context.strokeStyle = 'yellow';//`rgba(255, 255, 255, 0.4)`;
     context.shadowBlur = 30;
-    context.shadowColor = "#bd9df2";
+    context.shadowColor = "orange";
     context.stroke();
     context.closePath();
   }
@@ -274,7 +278,6 @@ class Heart{
         context.beginPath();
         context.arc(random.range(xs,xe), random.range(ys,ye), 20, 0, 2 * Math.PI);
         context.fillStyle = this.getRandomColor();
-
         context.fill();
         context.restore();
       }

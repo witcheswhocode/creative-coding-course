@@ -3,14 +3,14 @@ const random = require('canvas-sketch-util/random');
 const math = require('canvas-sketch-util/math');
 
 const settings = {
-  dimensions: [ 1080, 1080 ],
+  dimensions: [ 1080, 1920 ],
   animate: true
 };
 
 const sketch = ({ context, width, height }) => {
   const agents = [];
 
-  for(let i = 0; i < 30; i++){
+  for(let i = 0; i < 100; i++){
     const x = random.range(0,width);
     const y = random.range(0,height);
     agents.push(new Heart(x,y));
@@ -29,14 +29,17 @@ const sketch = ({ context, width, height }) => {
 
         if (dist > 20) continue;
         if(heart.half == 'whole' || other.half == 'whole') continue;
+        if(heart.half == 'none' || other.half == 'none') continue;
         heart.half = 'whole';
         other.half = 'none'
       }
     }
     agents.forEach(function(heart){
-      heart.update();
-      heart.drawHeart(context);
-      heart.bounce(width-100,height-100);
+      if (heart.half != 'none'){
+        heart.update();
+        heart.drawHeart(context);
+        heart.bounce(width-150,height-150);
+      }
     });
   };
 };
@@ -60,7 +63,8 @@ class Heart{
     this.pos = new Vector(x,y);
     this.velocity = new Vector(random.range(-1,1),random.range(-1,1));
     this.half = (random.range(0,1) > 0.5) ? 'left' :  'right';
-    this.colorLevel = 0;
+    this.colorLevel = -10;
+    this.dagger = 0;
   }
 
   update(){
@@ -152,11 +156,17 @@ class Heart{
     }
     
     if (this.half == 'whole') {
-      if (this.colorLevel < 8){
-        context.fillStyle = this.getHeartColor(this.colorLevel);
+      if (this.colorLevel > 0){
+        if (this.colorLevel < 8){
+          context.fillStyle = this.getHeartColor(this.colorLevel);
+        }
+        else if (this.colorLevel > 8) {
+          context.fillStyle = this.getHeartColor(10);
+        }
       }
       else {
-        context.fillStyle = this.getHeartColor(10);
+        context.fillStyle = this.getHeartColor(0);
+        //console.log('else');
       }
       this.colorLevel += 0.05;
       //this.drawFire();
@@ -168,9 +178,36 @@ class Heart{
     context.restore();
 
     if (this.half == 'whole') {
-      this.drawFire(context);
+      if (this.colorLevel > 0){
+        this.drawFire(context);
+      }
+      /*if (this.colorLevel > 5 && this.dagger < 3){
+        this.dagger += 1;
+        this.drawLightning(context);
+      }*/
     }
   
+  }
+  drawLightning(context) {
+    var x = this.pos.x;
+    var y = this.pos.y;
+    context.beginPath();
+    context.moveTo(random.range(0,500), 500);
+    context.lineTo(x, y);
+    context.lineWidth = 3;
+    context.strokeStyle = 'blue';//`rgba(255, 255, 255, 0.4)`;
+    context.shadowBlur = 30;
+    context.shadowColor = "#bd9df2";
+    context.stroke();
+    context.closePath();
+  }
+  
+  drawDagger(context){
+    var x = this.pos.x;
+    var y = this.pos.y;
+
+
+
   }
   getXDimension(layer){
     switch(layer){

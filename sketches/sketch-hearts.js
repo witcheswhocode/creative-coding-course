@@ -10,13 +10,15 @@ const settings = {
 const sketch = ({ context, width, height }) => {
   const agents = [];
 
-  for(let i = 0; i < 100; i++){
+  for(let i = 0; i < 50; i++){
     const x = random.range(0,width);
     const y = random.range(0,height);
     agents.push(new Heart(x,y,width,height));
   }
 
-  return ({ context, width, height }) => {
+  return ({ context, width, height }) => {  
+    context.clearRect(0, 0, width, height); // clear canvas
+
     context.fillStyle = 'white';
     context.fillRect(0, 0, width, height);
 
@@ -28,6 +30,7 @@ const sketch = ({ context, width, height }) => {
         const dist = heart.pos.getDistance(other.pos);
 
         if (dist > 20) continue;
+        if(heart.half == 'dead' || other.half == 'dead') continue;
         if(heart.half == 'whole' || other.half == 'whole') continue;
         if(heart.half == 'none' || other.half == 'none') continue;
         heart.half = 'whole';
@@ -35,10 +38,23 @@ const sketch = ({ context, width, height }) => {
       }
     }
     agents.forEach(function(heart){
-      if (heart.half != 'none'){
+      if (heart.half != 'none' || heart.half != 'dead'){
         heart.update();
         heart.drawHeart(context);
-        heart.bounce(width-150,height-150);
+        heart.bounce(width-150,height+150);
+        
+        if (heart.half == 'whole') {
+          if (heart.colorLevel > 0 && heart.colorLevel < 8){
+            heart.drawFire(context);
+          }
+          if (heart.colorLevel > -2 && heart.dagger < 10){
+            heart.dagger += 1;
+            heart.drawLightning(context);
+          }
+        }
+      }
+      if (heart.half == 'dead'){
+        heart.drop();
       }
     });
   };
@@ -73,6 +89,9 @@ class Heart{
     this.pos.x += this.velocity.x;
     this.pos.y += this.velocity.y;
   }
+  drop(){
+    this.pos.y -= (-10)*this.colorLevel;
+  }
 
   bounce(width,height){
     if(this.pos.x <= 0 || this.pos.x >= width){
@@ -90,7 +109,7 @@ class Heart{
     var height = 200;
     
     // kill heart after it burns
-    if (this.colorLevel > 10) return;
+    if (this.colorLevel > 10) this.half = 'dead';
     // skip dead heart that became whole
     if (this.half == 'none') return;
 
@@ -157,7 +176,7 @@ class Heart{
         );
     }
     
-    if (this.half == 'whole') {
+    if (this.half == 'whole' || this.half == 'dead') {
       if (this.colorLevel > 0){
         if (this.colorLevel < 8){
           context.fillStyle = this.getHeartColor(this.colorLevel);
@@ -177,33 +196,66 @@ class Heart{
       context.fillStyle = this.getHeartColor(0);
     }
     context.fill();
-    context.shadowColor = "transparent";
-
     context.restore();
-
-    if (this.half == 'whole') {
-      if (this.colorLevel > 0){
-        this.drawFire(context);
-      }
-      if (this.colorLevel > -2 && this.dagger < 2){
-        this.dagger += 1;
-        this.drawLightning(context);
-      }
-    }
   
+  }
+  drawBolt(x1,y1,x2,y2,displace,context)
+  {
+    if (displace < 100) {
+      context.moveTo(x1,y1);
+      context.lineTo(x2,y2);
+    }
+    else {
+      var mid_x = (x2+x1)/2;
+      var mid_y = (y2+y1)/2;
+      mid_x += (Math.random()-.5)*displace;
+      mid_y += (Math.random()-.5)*displace;
+      drawBolt(x1,y1,mid_x,mid_y,displace/2);
+      drawBolt(x2,y2,mid_x,mid_y,displace/2);
+    }
   }
   drawLightning(context) {
     var x = this.pos.x;
     var y = this.pos.y;
+    var xp = random.range(-this.canvasWidth,this.canvasWidth);
+    var yp = -1000;
+    context.save();
     context.beginPath();
-    context.moveTo(random.range(0,this.width), 1000);
-    context.lineTo(x, y);
+    context.moveTo(xp, yp);
+    /*while (Math.abs(xp-x) > 5 && Math.abs(yp-y+100) > 5){
+      if (Math.abs(xp-x) > 25){
+        xp = xp+random.range(-25,25);
+      } 
+      if (Math.abs(yp-y) > 25){
+        yp = yp+random.range(-25,25);
+      } 
+      context.lineTo(xp, yp);
+    }*/
+    var boltDenominator = 100;
+    const dx = x - xp;
+    const dy = y - yp;
+    const dist =  Math.sqrt(dx*dx + dy*dy); //pythag
+    const lildist = dist/boltDenominator;
+    /*for (let i = 0; i < boltDenominator; i++){
+
+    }*/
+    /*for (let i = 500; i > 0; i--){
+      if(Math.abs(xp-x) < 25 || Math.abs(yp-y+100) < 25) continue;
+      context.lineTo(xp, yp);
+      xp = xp+random.range(-25,25);
+      yp = yp+random.range(-25,50);
+    }*/
+    context.lineTo(Math.abs((x-xp)/4), Math.abs((y-yp)/4));
+    context.lineTo(Math.abs((x-xp)/2), Math.abs((y-yp)/2));
+    context.lineTo(Math.abs(((x-xp)/4)*3), Math.abs(((y-yp)/4)*3));
+    context.lineTo(x, y+100);
     context.lineWidth = 10;
     context.strokeStyle = 'yellow';//`rgba(255, 255, 255, 0.4)`;
     context.shadowBlur = 30;
     context.shadowColor = "orange";
     context.stroke();
     context.closePath();
+    context.restore();
   }
   
   drawDagger(context){

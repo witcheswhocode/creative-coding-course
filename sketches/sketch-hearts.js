@@ -7,6 +7,12 @@ const settings = {
   animate: true
 };
 
+const startColorLevel = -10;
+const incrementColorLevelBy = 0.05;
+const deadHeart = 10;
+const startFireLevel = 0;
+const endFireLevel = 8;
+
 const sketch = ({ context, width, height }) => {
   const agents = [];
 
@@ -19,7 +25,7 @@ const sketch = ({ context, width, height }) => {
   return ({ context, width, height }) => {  
     context.clearRect(0, 0, width, height); // clear canvas
 
-    context.fillStyle = 'white';
+    context.fillStyle = "white";//"rgb(11, 9, 10)";
     context.fillRect(0, 0, width, height);
 
     for (let i = 0; i < agents.length; i++){
@@ -41,10 +47,10 @@ const sketch = ({ context, width, height }) => {
       if (heart.half != 'none' || heart.half != 'dead'){
         heart.update();
         heart.drawHeart(context);
-        heart.bounce(width-150,height+150);
+        heart.bounce(width,height);
         
         if (heart.half == 'whole') {
-          if (heart.colorLevel > 0 && heart.colorLevel < 8){
+          if (heart.colorLevel > startFireLevel && heart.colorLevel < endFireLevel){
             heart.drawFire(context);
           }
           if (heart.colorLevel > -2 && heart.dagger < 10){
@@ -79,7 +85,7 @@ class Heart{
     this.pos = new Vector(x,y);
     this.velocity = new Vector(random.range(-1,1),random.range(-1,1));
     this.half = (random.range(0,1) > 0.5) ? 'left' :  'right';
-    this.colorLevel = -10;
+    this.colorLevel = startColorLevel;
     this.dagger = 0;
     this.canvasWidth = width;
     this.canvasHeight = height;
@@ -90,7 +96,7 @@ class Heart{
     this.pos.y += this.velocity.y;
   }
   drop(){
-    this.pos.y -= (-10)*this.colorLevel;
+    this.pos.y -= (-6)*this.colorLevel;
   }
 
   bounce(width,height){
@@ -109,9 +115,10 @@ class Heart{
     var height = 200;
     
     // kill heart after it burns
-    if (this.colorLevel > 10) this.half = 'dead';
+    if (this.colorLevel > deadHeart) this.half = 'dead';
     // skip dead heart that became whole
     if (this.half == 'none') return;
+    if (this.half == 'dead' && this.colorLevel > 20) return;
 
     context.save();
     context.beginPath();
@@ -182,15 +189,15 @@ class Heart{
           context.fillStyle = this.getHeartColor(this.colorLevel);
         }
         else if (this.colorLevel > 8) {
-          context.fillStyle = this.getHeartColor(10);
+          context.fillStyle = this.getHeartColor(8);
+          context.shadowBlur = 30;
+          context.shadowColor = "black";
         }
       }
       else {
         context.fillStyle = this.getHeartColor(0);
-        //console.log('else');
       }
-      this.colorLevel += 0.05;
-      //this.drawFire();
+      this.colorLevel += incrementColorLevelBy;
     }
     else {
       context.fillStyle = this.getHeartColor(0);
@@ -245,9 +252,9 @@ class Heart{
       xp = xp+random.range(-25,25);
       yp = yp+random.range(-25,50);
     }*/
-    context.lineTo(Math.abs((x-xp)/4), Math.abs((y-yp)/4));
-    context.lineTo(Math.abs((x-xp)/2), Math.abs((y-yp)/2));
-    context.lineTo(Math.abs(((x-xp)/4)*3), Math.abs(((y-yp)/4)*3));
+    context.lineTo(random.range(x,xp), Math.abs((y+yp)/4));
+    context.lineTo(random.range(x,xp), Math.abs((y+yp)/2));
+    context.lineTo(random.range(x,xp), (Math.abs((y+yp)/4)*3));
     context.lineTo(x, y+100);
     context.lineWidth = 10;
     context.strokeStyle = 'yellow';//`rgba(255, 255, 255, 0.4)`;
@@ -306,6 +313,9 @@ class Heart{
     else if (layer >= 8){
       return "rgb(11, 9, 10)";
     }
+    else {
+      return "white"
+    }
   }
   getRandomColor(){
     const randomNum = random.rangeFloor(0,2);
@@ -329,7 +339,9 @@ class Heart{
         context.save();
         context.beginPath();
         context.arc(random.range(xs,xe), random.range(ys,ye), 20, 0, 2 * Math.PI);
+        
         context.fillStyle = this.getRandomColor();
+
         context.fill();
         context.restore();
       }

@@ -1,4 +1,6 @@
 const canvasSketch = require('canvas-sketch');
+const random = require('canvas-sketch-util/random');
+const math = require('canvas-sketch-util/math');
 
 const settings = {
   dimensions: [ 1080, 1080 ]
@@ -6,7 +8,6 @@ const settings = {
 
 let manager;
 let text = 'A';
-let fontSize = 1200;
 let fontFamily = 'serif';
 
 const typeCanvas = document.createElement('canvas');
@@ -17,6 +18,7 @@ const sketch = ({ context, width, height }) => {
   const cols = Math.floor(width/cell);
   const rows = Math.floor(height/cell);
   const numCells = cols * rows;
+  let fontSize = cols*1.2;
 
   typeCanvas.width = cols;
   typeCanvas.height = rows;
@@ -26,7 +28,7 @@ const sketch = ({ context, width, height }) => {
     typeContext.fillRect(0, 0, cols, rows);
 
     typeContext.fillStyle = 'white';
-    typeContext.font = `${cols}px ${fontFamily}`;
+    typeContext.font = `${fontSize}px ${fontFamily}`;
     typeContext.textBaseline = 'top';
 
 
@@ -52,7 +54,13 @@ const sketch = ({ context, width, height }) => {
 
     const typeData = typeContext.getImageData(0,0,cols,rows).data;
 
-    context.drawImage(typeCanvas,0,0);
+    //context.drawImage(typeCanvas,0,0);
+
+    context.fillStyle = 'black';
+    context.fillRect(0,0,width,height);
+
+    context.textBaseline = 'middle';
+    context.textAlign = 'center';
 
     for (let i = 0; i < numCells; i++){
       const col = i % cols;
@@ -66,19 +74,39 @@ const sketch = ({ context, width, height }) => {
       const b = typeData[i * 4 + 2];
       const a = typeData[i * 4 + 3];
 
-      context.fillStyle = `rgb(${r},${g},${b})`;
+      const glyph = getGlyph(r)
+
+      context.font = `${cell * 2}px ${fontFamily}`;
+      if (Math.random() < 0.1) context.font = `${cell * 3}px ${fontFamily}`;
+
+      context.fillStyle = 'white';//`rgb(${r},${g},${b})`;
 
       context.save();
       context.translate(x,y);
       context.translate(cell*0.5,cell*0.5); // fix circles
       //context.fillRect(0,0,cell,cell);
-      context.beginPath();
-      context.arc(0,0,cell*0.5,0,Math.PI * 2);
-      context.fill();
+      /*context.beginPath();
+      context.arc(0,0,cell*0.5,0,Math.PI * 2);*/
+      //context.fill();
+
+      context.fillText(glyph,0,0);
+
       context.restore();
     }
   };
 };
+
+const getGlyph = (v) => {
+  if (v < 50) return '';
+  if (v < 100) return '.';
+  if (v < 150) return '-';
+  if (v < 200) return '+';
+  if (v < 250) return 'love';
+
+  const glyphs = '_* /'.split('');
+
+  return random.pick(glyphs);
+}
 
 const onKeyUp = (e) => {
   text = e.key;

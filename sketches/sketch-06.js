@@ -3,8 +3,10 @@ const random = require('canvas-sketch-util/random');
 const math = require('canvas-sketch-util/math');
 
 const settings = {
+  animate: true,
+  duration: 10,
+  fps: 3,
   dimensions: [ 1080, 1080 ],
-  animate: true
 };
 
 let manager;
@@ -119,13 +121,14 @@ const sketch = ({ context, width, height }) => {
 };
 
 const getGlyph = (v) => {
+  const glyphs = '_* /'.split('');
+  
   if (v < 50) return 'l';
   if (v < 100) return 'o';
   if (v < 105) return 't';
   if (v < 200) return 'u';
   if (v < 250) return 's';
 
-  const glyphs = '_* /'.split('');
 
   return random.pick(glyphs);
 }

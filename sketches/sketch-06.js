@@ -105,8 +105,8 @@ const sketch = ({ context, width, height }) => {
 
       const glyph = getGlyph(b);
 
-      context.font = `${cell * 2}px ${fontFamily}`;
-      if (Math.random() < 0.1) context.font = `${cell * 6}px ${fontFamily}`;
+      context.font = `${cell * 3}px ${fontFamily}`;
+      if (Math.random() < 0.09) context.font = `${cell * 6}px ${fontFamily}`;
 
       context.fillStyle = `rgb(${r},${g},${b})`;
 
@@ -121,16 +121,17 @@ const sketch = ({ context, width, height }) => {
 };
 
 const getGlyph = (v) => {
-  const glyphs = '_* /'.split('');
-  
-  if (v < 50) return 'l';
-  if (v < 100) return 'o';
-  if (v < 105) return 't';
-  if (v < 200) return 'u';
-  if (v < 250) return 's';
+  const glyphs = '_*+.'.split('');
+
+  if (v < 50) return '~';
+  if (v < 100) return random.pick(glyphs);
+  if (v < 150) return '-';
+  if (v < 200) return random.pick(['*',';']);
+  if (v < 250) return '.';
+  if (v > 250) return '3';
 
 
-  return random.pick(glyphs);
+  return '.';
 }
 
 /*const onKeyUp = (e) => {

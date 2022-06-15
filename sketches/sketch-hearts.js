@@ -89,6 +89,7 @@ class Heart{
     this.dagger = 0;
     this.canvasWidth = width;
     this.canvasHeight = height;
+    this.breakDirection = random.range(0,1);
   }
 
   update(){
@@ -204,6 +205,27 @@ class Heart{
     }
     context.fill();
     context.restore();
+
+    // crack in the heart when it's dying
+    if (this.colorLevel > deadHeart-3){
+      context.save();
+      context.beginPath();
+      context.strokeStyle = 'white';
+      context.lineWidth = 5;
+      context.moveTo(x, y + topCurveHeight - 10);
+      if (this.breakDirection < 0.5){
+        if (this.colorLevel > 7) context.lineTo(x+20, y+random.range(80,90));
+        if (this.colorLevel > 8) context.lineTo(x-20, y+random.range(100,110));
+        if (this.colorLevel > 9) context.lineTo(x+20, y+random.range(140,150));
+      }
+      else{
+        if (this.colorLevel > 7) context.lineTo(x-20, y+random.range(80,90));
+        if (this.colorLevel > 8) context.lineTo(x+20, y+random.range(100,110));
+        if (this.colorLevel > 9) context.lineTo(x-20, y+random.range(140,150));
+      }
+      context.stroke();
+      context.restore();
+    }
   
   }
   drawBolt(x1,y1,x2,y2,displace,context)
@@ -224,8 +246,8 @@ class Heart{
   drawLightning(context) {
     var x = this.pos.x;
     var y = this.pos.y;
-    var xp = random.range(-this.canvasWidth,this.canvasWidth);
-    var yp = -1000;
+    var xp = this.canvasWidth/2;
+    var yp = 0;
     context.save();
     context.beginPath();
     context.moveTo(xp, yp);
@@ -243,18 +265,18 @@ class Heart{
     const dy = y - yp;
     const dist =  Math.sqrt(dx*dx + dy*dy); //pythag
     const lildist = dist/boltDenominator;
-    /*for (let i = 0; i < boltDenominator; i++){
+    for (let i = 0; i < boltDenominator; i++){
 
-    }*/
+    }
     /*for (let i = 500; i > 0; i--){
       if(Math.abs(xp-x) < 25 || Math.abs(yp-y+100) < 25) continue;
       context.lineTo(xp, yp);
       xp = xp+random.range(-25,25);
       yp = yp+random.range(-25,50);
     }*/
-    context.lineTo(random.range(x,xp), Math.abs((y+yp)/4));
+    /*context.lineTo(random.range(x,xp), Math.abs((y+yp)/4));
     context.lineTo(random.range(x,xp), Math.abs((y+yp)/2));
-    context.lineTo(random.range(x,xp), (Math.abs((y+yp)/4)*3));
+    context.lineTo(random.range(x,xp), (Math.abs((y+yp)/4)*3));*/
     context.lineTo(x, y+100);
     context.lineWidth = 10;
     context.strokeStyle = 'yellow';//`rgba(255, 255, 255, 0.4)`;
